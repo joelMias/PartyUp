@@ -1,0 +1,137 @@
+#main {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.title-register {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  font-size: 45px;
+  font-weight: bold;
+  color: #9b93ff;
+  letter-spacing: 2px;
+}
+
+.text-register {
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.formulari {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  max-width: 420px;
+  margin: 0 auto;
+
+  padding: 40px 70px;
+  border-radius: 20px;
+
+  background-color: rgba(0, 0, 0, 0.3);
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.celda {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #334155;
+  border-radius: 9px;
+  color: white;
+  border: 2px solid #3F4D61;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.formTel{
+  display: flex;
+  gap: 10px;
+}
+
+.prefix{
+  width: 25%;
+}
+
+.tel{
+  width: 80%;
+}
+
+h2 {
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+#botons {
+  margin-top: 15px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.celdaIncorrecte{
+  border: red;
+}
+
+.button-register {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 150px;                
+  height: 45px;                
+  border-radius: 7px;          
+  border: none;                
+  text-decoration: none;       
+  color: white;                
+  font-weight: bold;
+  cursor: pointer;             
+  background-color: #2b2b2b;  
+  box-sizing: border-box;
+  padding: 0 15px;
+}
+
+.celdaIncorrecte {
+  border: 2px solid red !important;
+}
+
+.error-msg {
+  color: red;
+  font-size: 12px;
+  margin-top: 3px;
+  display: block;
+}
+
+.button-register:hover,
+.button-register:focus {
+  color: #9333EA;
+  outline: none;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.password-wrapper .toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+}

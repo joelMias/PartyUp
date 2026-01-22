@@ -1,0 +1,19 @@
+.contenidor-header {
+  display: flex;
+  justify-content: space-around;
+  gap: 500px;
+  align-items: center;
+  padding: 10px 40px; /*10px adalt i abaix i 40 als costats*/
+  height: 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.fonsLila{
+    background-color: #9333EA;
+}

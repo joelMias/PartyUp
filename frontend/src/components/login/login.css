@@ -1,0 +1,43 @@
+#contenidor-formulari{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 175px;
+    padding: 50px;
+    width: 100%;
+}
+
+.textLogin{
+    margin-top: 0;
+    color: #AE94D9;
+    font-size: 14px;
+}
+
+#formulariLogin{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+}
+
+.botoLogin{
+    background-color: #343F55;
+    color: white;
+    width: 60%;
+    border: 1px solid #3b3b3b;
+    border-radius: 5px;
+    padding: 12px 0;
+    box-shadow: 0 2px 4px rgba(34, 34, 34, 0.25);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.contenidor-botoLogin{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}

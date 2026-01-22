@@ -1,0 +1,41 @@
+.colorLila{
+    color: #DD7AD4;
+}
+
+#contenidor-central{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 110px;
+    text-align: center;
+}
+
+.title{
+    line-height: 0;
+    font-size: 60px;
+}
+
+#descripcio{
+    line-height: 2;
+    width: 30%;
+}
+
+#botons-match{
+    display: flex;
+    align-items: center
+}
+
+#community{
+    background-color: white;
+    font-weight: bold;
+    color: #9333EA;
+}
+
+.botoCentre{
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    gap: 15px;
+}
