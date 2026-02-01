@@ -1,0 +1,32 @@
+#contenidor-alert{
+  display: flex;
+  justify-content: center;
+}
+
+.my-alert {
+  display: flex;
+  gap: 8px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 30%;
+  border-radius: 5px;
+  font-family: sans-serif;
+  color: white;
+  position: fixed;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.my-alert.success {
+  background-color: rgba(40, 167, 69, 0.8);
+}
+
+.my-alert.warning {
+  background-color: rgba(255, 193, 7, 0.6);
+  color: black;
+}
+
+.my-alert.error {
+   background-color: rgba(220, 53, 69, 0.7);
+}

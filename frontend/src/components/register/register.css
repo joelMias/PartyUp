@@ -1,7 +1,15 @@
+.contenidor-general-register{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: 75px;
+}
+
 #main {
   display: flex;
   justify-content: center;
   padding: 10px;
+  margin: 0 auto;
 }
 
 .title-register {
