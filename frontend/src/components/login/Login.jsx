@@ -122,7 +122,6 @@ function Login(props){
                 
                 <h1>Log In</h1>
             <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
-                {errors.server && <div className="error-msg">{errors.server}</div>}
             <Form id='formulariLogin'> 
                     <FormGroup className="camp">
                         <Label for="email" className='textLogin'> Username or Email address*</Label>
