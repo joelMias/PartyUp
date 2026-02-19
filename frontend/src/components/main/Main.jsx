@@ -7,12 +7,12 @@ function Main() {
             <h1 className="colorLila title">Gaming Partner</h1>
             <p id="descripcio">Connect with gamers who share your passion, skill level, and schedule. Swipe, match, and game together in the ultimate gaming social platform.</p>
             <div id="botons-match">  
-                <a href="/login" className="fonsLila botoCentre app-link">
+                <a href="/login" className="fonsLila botoCentre app-linkMain">
                   <img src="/img/rayo.png" style={{ height: '20px' }} alt="rayo" />
                   Start Matching
                 </a>
 
-                <a href="/register" id="community" className="botoCentre app-link">
+                <a href="/register" id="community" className="botoCentre app-linkMain">
                   <img src="/public/img/comunity.png" style={{ height: '20px' }} />
                   Join Community
                 </a>

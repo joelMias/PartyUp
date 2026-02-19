@@ -1,0 +1,47 @@
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  width: 100%;
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid white;
+  background-image: url("../../../public/img/avatar-prova.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.user-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.headerCard-userName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.text-card {
+  color: white;
+  margin: 0;
+  font-size: 13px;
+}
+
+.text-card:last-child {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.dropdown-img {
+  height: 14px;
+}

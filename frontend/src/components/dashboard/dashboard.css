@@ -1,0 +1,78 @@
+.dashboard-container {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px; /* antes 15% */
+  background-color: #27024b;
+  border-right: 2px solid #40196C;
+  padding: 15px;
+}
+
+/* SEARCH */
+#searchbar-friends {
+  display: flex;
+  align-items: center;
+  background-color: #43117F;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 15px;
+}
+
+#cerca-friends {
+  width: 100%;
+  border: 0;
+  background-color: transparent;
+  color: white;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+#cerca-friends:focus {
+  outline: none;
+}
+
+/* TITLES */
+.sidebar h2 {
+  font-size: 14px;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+/* FRIENDS LIST */
+.friends-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 300px;
+  padding-right: 4px;
+}
+
+.friends-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.friends-container::-webkit-scrollbar-thumb {
+  background: #9333EA;
+  border-radius: 10px;
+}
+
+.contenidor-userFriend {
+  background-color: rgba(89, 10, 151, 0.4);
+  border-radius: 14px;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.contenidor-userFriend:hover {
+  background-color: rgba(147, 51, 234, 0.6);
+}
+
+.friends-container::-webkit-scrollbar {
+  display: none;
+}

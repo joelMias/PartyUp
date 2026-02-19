@@ -1,41 +1,63 @@
-.colorLila{
-    color: #DD7AD4;
+#contenidor-central {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  text-align: center;
+  gap: 15px;
+  padding: 0 20px;
 }
 
-#contenidor-central{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 110px;
-    text-align: center;
+.title {
+  line-height: 1.1;
+  font-size: 46px;
+  margin: 0;
 }
 
-.title{
-    line-height: 0;
-    font-size: 60px;
+.colorLila{ color: #DD7AD4; }
+
+#descripcio {
+  line-height: 1.6;
+  width: 40%;
+  font-size: 15px;
+  margin-top: 10px;
+  margin-bottom: 25px;
 }
 
-#descripcio{
-    line-height: 2;
-    width: 30%;
+#botons-match {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-#botons-match{
-    display: flex;
-    align-items: center
+.botoCentre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 36px;
+  gap: 8px;
 }
 
-#community{
-    background-color: white;
-    font-weight: bold;
-    color: #9333EA;
+.botoCentre img {
+  height: 16px !important;
 }
 
-.botoCentre{
-    height: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    gap: 15px;
+.app-linkMain {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-linkMain:hover {
+  transform: translateY(-1px);
+}
+
+#community {
+  background-color: white;
+  font-weight: 600;
+  color: #9333EA;
 }

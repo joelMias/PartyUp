@@ -1,43 +1,55 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './header.css';
+import Card from '../user-card/Card';
 
-
-function Header(props) {
+function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout }) {
   // props.isHidden -> estat (boolea)
   // props.setHidden -> funcio per canviar l'estat al App
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
 
   return (
-    <header className= 'contenidor-header'> 
+    <header className='contenidor-header'>
       <Link to="/" className="logo" onClick={() => props.setHidden(false)}>
         <img src="/public/img/mando.png" alt="logo" className="logo" />
         <p className="app-link" id="titol">PARTY-UP</p>
       </Link>
 
-      <nav>
-        {/* Si isHidden es false → mostrem el boto */}
-        {props.isHidden ? (
-          // Si està ocult, posare un div buit amb la mateix amplada del Link, ja que sino es mou el logo cap a la dreta al ser un flex
-          <div style={{ width: "110px" }}></div>
+      <nav className='header-navbar'>
+        {isDashboard ? (
+          <div className="contenidor-headerDashboard"> {/*Si estem al dashboard es mostrarà aixo */}
+              <div id='searchbar'>
+                <img src="./public/img/lupa.png" className="lupa-img" alt="search" />
+                <input type="text" name="cerca" id="cerca" placeholder="Search games or users" />
+              </div>
+
+              <div className='header-user'>
+                  <img src="./public/img/campana.png" className="bell-img" alt="notifications" />
+                  <img src="./public/img/message.png" className="message-img" alt="message"/>
+
+                  <div className='containerHeader-user'>
+                    <Card isHeader={true} />
+                  </div>
+              </div>
+          </div>
         ) : (
-          <>
+          <div className="container-linksLogin">
             <Link
               to="/register"
-              id="register"
               className="fonsLila app-link"
-              onClick={() => props.setHidden(true)}
+              onClick={() => setHidden(true)}
             >
               Get Started
             </Link>
 
             <Link
               to="/login"
-              id="login"
               className="fonsLila app-link"
-              onClick={() => props.setHidden(true)}
+              onClick={() => setHidden(true)}
             >
               Log In
             </Link>
-          </>
+          </div>
         )}
       </nav>
     </header>

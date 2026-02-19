@@ -2,25 +2,31 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import './login.css';
 import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LoginData from '../../entity/LoginData';
 import MyAlert from '../alerta/Alert';
 
 function Login(props){
+    const location = useLocation();    
     const navigate = useNavigate();
-    const [hideAlert, setHideAlert] = React.useState(false);
 
-    React.useEffect(() =>{
-        if(!hideAlert){
+    // Nou estat per controlar l'alert de registre
+    // Només serà true si venim del register
+    const [showRegisteredAlert, setShowRegisteredAlert] = React.useState(false);
+
+    useEffect(() => {
+        if(location.state?.registered){
+            setShowRegisteredAlert(true); // activem l'alert
+
+            // Després de 3 segons, ocultem l'alert automàticament
             const timer = setTimeout(() => {
-                setHideAlert(true);
+                setShowRegisteredAlert(false);
             }, 3000);
 
-            return () => {
-                clearTimeout(timer);
-            }
+            // Neteja del timer si el component es desmonta abans
+            return () => clearTimeout(timer);
         }
-    }, []);
+    }, []); // s'executa cada cop que canvia location.state
     
 
     useEffect(() => {
@@ -94,7 +100,11 @@ function Login(props){
         .then(() => {
             // Si hem arribat aquí, vol dir que el login ha estat correcte
             // Naveguem a la pàgina principal
-            navigate("/");
+            props.setHidden(false);
+            props.setIsLoggedIn(true);
+            navigate("/dashboard", {
+                state: {loggedIn: true}
+            });
         })
         .catch(err => {
             // Si hi ha hagut algun error (HTTP o JSON), el capturem aquí
@@ -108,62 +118,85 @@ function Login(props){
 
     return(
         <div>
-            {errors.server && <MyAlert  type="error" title="Server Error" message={errors.server} />}
-            {Object.keys(errors).length > 0 && !errors.server && <MyAlert  type="warning" title="Check Input" message="Please fix the highlighted fields." />}
-            {success && <MyAlert  type="success" title="Success" message="User registered successfully!" />}
+           {/*Alerta d'error de servidor'*/}
+            {errors.server &&(
+                <div className="alert-container">
+                    <MyAlert type="error" title="Server Error" message={errors.server} />
+                </div>
+            )}
 
-            {!hideAlert && <MyAlert
-                type="success"
-                title="Success"
-                message="User registered successfully! You can now log in."
-            />}
+            {/*Alerta d'error en el formulari*/}
+            {Object.keys(errors).length > 0 && !errors.server && (
+            <div className="alert-container">
+                <MyAlert type="warning" title="Check Input" message="Please fix the highlighted fields." />
+            </div>
+            )}
 
-            <div id='contenidor-formulari' className='formulari'>
-                
-                <h1>Log In</h1>
-            <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
-            <Form id='formulariLogin'> 
-                    <FormGroup className="camp">
-                        <Label for="email" className='textLogin'> Username or Email address*</Label>
-                        <Input 
-                            id='email'
-                            name='email' 
-                            placeholder="" 
-                            type="email" 
-                            className={`celda ${errors.email ? "celdaIncorrecte" : ""}`}
-                            onChange={(val) => setLoginData({...loginData, eu: val.target.value})}
-                        />
-                    </FormGroup>
+            {/*Alerta de usuari registrat correctament*/}
+            {success && (
+            <div className="alert-container">
+                <MyAlert type="success" title="Success" message="User registered successfully!" />
+            </div>
+            )}
+            
+            <div className='mainFormulari'>
+                {/* Alert només si venim del registre */}
+                {showRegisteredAlert && (
+                    <MyAlert
+                        type="success"
+                        title="Success"
+                        message="User registered successfully! You can now log in."
+                    />
+                )}
 
-                    <FormGroup className="camp">
-                        <Label for="password" className='textLogin'> Password *</Label>
-                        <div className="password-wrapper">
-                            <Input 
-                                id='password' 
-                                className={`celda ${errors.password ? "celdaIncorrecte" : ""}`} 
-                                name='password' 
-                                type="password" 
-                                onChange={(val) => setLoginData({...loginData, password: val.target.value})}
-                            />
-                            <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
-                                👁
-                            </span>
-                        </div>
-                    </FormGroup>
-
-                    <div className='contenidor-botoLogin'>
-                        <Button type='button' className='botoLogin' onClick={handleSubmit}>
-                            Log In
-                        </Button>
-
-                        <Link to="/register" id='main' className='textLogin'>
-                            Don't have an account?
-                        </Link>
-                        <Link to="/" id='main' className='textLogin'>
-                            Forgot password?
-                        </Link>
+                <div id='contenidor-formulari' className='formulari'>
+                    <div className='contenidorTitolLogIn'>
+                        <h1 className='titolLogIn'>Log In</h1>
                     </div>
-            </Form>
+                    <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
+                    <Form id='formulariLogin'> 
+                            <FormGroup className="camp">
+                                <Label for="email" className='textLogin'> Username or Email address*</Label>
+                                <Input 
+                                    id='email'
+                                    name='email' 
+                                    placeholder="" 
+                                    type="email" 
+                                    className={`celda ${errors.email ? "celdaIncorrecte" : ""}`}
+                                    onChange={(val) => setLoginData({...loginData, eu: val.target.value})}
+                                />
+                            </FormGroup>
+
+                            <FormGroup className="camp">
+                                <Label for="password" className='textLogin'> Password *</Label>
+                                <div className="password-wrapper">
+                                    <Input 
+                                        id='password' 
+                                        className={`celda ${errors.password ? "celdaIncorrecte" : ""}`} 
+                                        name='password' 
+                                        type="password" 
+                                        onChange={(val) => setLoginData({...loginData, password: val.target.value})}
+                                    />
+                                    <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+                                        👁
+                                    </span>
+                                </div>
+                            </FormGroup>
+
+                            <div className='contenidor-botoLogin'>
+                                <Button type='button' className='botoLogin' onClick={handleSubmit}>
+                                    Log In
+                                </Button>
+
+                                <Link to="/register" id='main' className='textLogin'>
+                                    Don't have an account?
+                                </Link>
+                                <Link to="/" id='main' className='textLogin'>
+                                    Forgot password?
+                                </Link>
+                            </div>
+                    </Form>
+                </div>
             </div>
         </div>
     );

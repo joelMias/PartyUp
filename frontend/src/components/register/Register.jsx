@@ -80,7 +80,9 @@ function Register(props) {
                 if (data.success) {
                     setSuccess(true);
                     setErrors({});
-                    navigate("/login");
+                    navigate("/login", {
+                        state: { registered: true}
+                    });
                 } else {
                     setSuccess(false);
                     setErrors({ server: data.message });// Si hi ha algun error (email duplicat, error BD, etc.) guardem el missatge d'error per mostrar-lo al formulari
@@ -97,9 +99,26 @@ function Register(props) {
 
     return (
         <div>
-            {errors.server && <MyAlert  type="error" title="Server Error" message={errors.server} />}
-            {Object.keys(errors).length > 0 && !errors.server && <MyAlert  type="warning" title="Check Input" message="Please fix the highlighted fields." />}
-            {success && <MyAlert  type="success" title="Success" message="User registered successfully!" />}
+            {/*Alerta d'error de servidor'*/}
+            {errors.server &&(
+                <div className="alert-container">
+                    <MyAlert type="error" title="Server Error" message={errors.server} />
+                </div>
+            )}
+
+            {/*Alerta d'error en el formulari*/}
+            {Object.keys(errors).length > 0 && !errors.server && (
+            <div className="alert-container">
+                <MyAlert type="warning" title="Check Input" message="Please fix the highlighted fields." />
+            </div>
+            )}
+
+            {/*Alerta de usuari registrat correctament*/}
+            {success && (
+            <div className="alert-container">
+                <MyAlert type="success" title="Success" message="User registered successfully!" />
+            </div>
+            )}
 
 
             <div className='contenidor-general-register'>
