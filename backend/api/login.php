@@ -1,4 +1,7 @@
 <?php
+include('connexio.php');
+
+
 //Nose que fa pero es per evitar que el PHP imprimeixi  HTML per warnings o notices
 error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 ini_set('display_errors', 0);
@@ -30,39 +33,14 @@ $username = $data["username"];
 $password = $data["password"];
 $eu = $data["eu"];
 
-
-//Connexio a la base de dades:
-$host = "localhost";
-$port = 3307;
-$dbname = "partyup";
-$user = "root";
-$pass = "";
-
-
-//Provem de fer la connexió a la base de dades. En cas de que funcioni estarem connectats i en cas de que no retornem l'error al React
-try {
-    $pdo = new PDO(
-        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
-        $user,
-        $pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-} catch (PDOException $e) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Server error"
-    ]);
-    exit;
-}
-
 $stmt;
 
 if(!empty($email)){
-    $stmt = $pdo->prepare("SELECT id, password FROM users WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
 }
 else{
-    $stmt = $pdo->prepare("SELECT id, password FROM users WHERE username = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->execute([$username]);
 }
 
@@ -85,8 +63,20 @@ if (!password_verify($password, $user["password"])) {
     exit;
 }
 
+/*if ($password !== $user["password"]) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid credentials"
+    ]);
+    exit;
+}*/
+    
+
 // Login OK
 echo json_encode([
     "success" => true,
-    "userId" => $user["id"]
+    "userId" => $user["id"],
+    "username" => $user["username"],
+    "state" => "connected",
+    "description" => "Steam not connected"
 ]);

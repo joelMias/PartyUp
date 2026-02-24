@@ -1,4 +1,6 @@
 <?php
+include('connexio.php');
+
 //Per permetre peticions desde React
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -28,30 +30,6 @@ $date = $data["date"];
 
 //Encriptar la contrassenya:
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-//Connexio a la base de dades:
-$host = "localhost";
-$port = 3307;
-$dbname = "partyup";
-$user = "root";
-$pass = "";
-
-
-//Provem de fer la connexió a la base de dades. En cas de que funcioni estarem connectats i en cas de que no retornem l'error al React
-try {
-    $pdo = new PDO(
-        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
-        $user,
-        $pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-} catch (PDOException $e) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Server error"
-    ]);
-    exit;
-}
 
 //Comprovarem si el correu ja existeix
 $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");

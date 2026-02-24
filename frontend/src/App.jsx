@@ -12,6 +12,8 @@ function App() {
   const [isGetStartedHidden, setGetStartedHidden] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [userData, setUserData] = useState(null);
+
   //Aquesta funcio, la pasarem als fills per poder manipular l'estat
   function handleSetGetStartedHidden(value) {
     setGetStartedHidden(value);
@@ -19,6 +21,7 @@ function App() {
 
   function handleLogout() {
     setIsLoggedIn(false);
+    setUserData(null);
   }
 
   return (
@@ -28,6 +31,7 @@ function App() {
         isGetStartedHidden={isGetStartedHidden}
         isLoggedIn={isLoggedIn}
         logout={handleLogout}
+        userData={userData}
       />
       
       <Routes>
@@ -42,7 +46,9 @@ function App() {
         // Li passem la funcio perque el registre pugui ocultar el header
         element={<Login 
                     setHidden={handleSetGetStartedHidden} 
-                    setIsLoggedIn={setIsLoggedIn}/>} 
+                    setIsLoggedIn={setIsLoggedIn}
+                    setUserData={setUserData}/>
+                } 
         />
 
         <Route  path="/dashboard" element={<Dashboard />}/>

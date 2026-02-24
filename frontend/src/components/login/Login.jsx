@@ -5,6 +5,7 @@ import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LoginData from '../../entity/LoginData';
 import MyAlert from '../alerta/Alert';
+import UserData from '../../entity/userData';
 
 function Login(props){
     const location = useLocation();    
@@ -42,6 +43,57 @@ function Login(props){
     const [errors, setErrors] = React.useState({});
     const [showPassword, setShowPassword] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+
+    const [forgotPasswd, setForgotPasswd] = React.useState(false);
+
+    const handleForgotPassword = () => {
+        const newErrors = {};
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const email = loginData.email;
+        const isEmail = regexEmail.test(email);
+
+        if (!email) {
+            newErrors.email = "Missing field";
+            setSuccess(false);
+        }
+
+        if (!isEmail && email) {
+            newErrors.email = "Invalid email syntax";
+            setSuccess(false);
+        }
+
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length !== 0) return;
+
+        fetch("/api/sendCodeMail.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email })
+        })
+        .then(async res => {
+            const text = await res.text();   // Primero obtenemos el texto crudo
+            let data;
+            try {
+                data = JSON.parse(text);     // Intentamos parsear JSON
+            } catch (err) {
+                throw new Error("Invalid server response: " + text);
+            }
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message || "Error sending mail");
+            }
+            return data;
+        })
+        .then((data) => {
+            console.log('Código enviado (solo testing):', data.code);
+            setSuccess(true);
+        })
+        .catch(err => {
+            setErrors({ server: err.message });
+        });
+    };
 
     const handleSubmit = () => {
         const newErrors = {};
@@ -97,11 +149,21 @@ function Login(props){
         })
 
 
-        .then(() => {
+        .then((data) => {
+            const usuarioActual = new UserData(); //Creem un usuari on guardarem lles dades del usuari loggejat
+
+            usuarioActual.id = data.userId;
+            usuarioActual.username = data.username;
+            usuarioActual.state = data.state;
+            usuarioActual.description = data.description;
+
+            props.setUserData(usuarioActual);
+
             // Si hem arribat aquí, vol dir que el login ha estat correcte
             // Naveguem a la pàgina principal
             props.setHidden(false);
             props.setIsLoggedIn(true);
+
             navigate("/dashboard", {
                 state: {loggedIn: true}
             });
@@ -150,52 +212,76 @@ function Login(props){
                 )}
 
                 <div id='contenidor-formulari' className='formulari'>
-                    <div className='contenidorTitolLogIn'>
-                        <h1 className='titolLogIn'>Log In</h1>
-                    </div>
-                    <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
-                    <Form id='formulariLogin'> 
-                            <FormGroup className="camp">
-                                <Label for="email" className='textLogin'> Username or Email address*</Label>
-                                <Input 
-                                    id='email'
-                                    name='email' 
-                                    placeholder="" 
-                                    type="email" 
-                                    className={`celda ${errors.email ? "celdaIncorrecte" : ""}`}
-                                    onChange={(val) => setLoginData({...loginData, eu: val.target.value})}
-                                />
-                            </FormGroup>
-
-                            <FormGroup className="camp">
-                                <Label for="password" className='textLogin'> Password *</Label>
-                                <div className="password-wrapper">
+                {!forgotPasswd ? (
+                    <>
+                        <div className='contenidorTitolLogIn'>
+                            <h1 className='titolLogIn'>Log In</h1>
+                        </div>
+                        <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
+                        <Form id='formulariLogin'> 
+                                <FormGroup className="camp">
+                                    <Label for="email" className='textLogin'> Username or Email address*</Label>
                                     <Input 
-                                        id='password' 
-                                        className={`celda ${errors.password ? "celdaIncorrecte" : ""}`} 
-                                        name='password' 
-                                        type="password" 
-                                        onChange={(val) => setLoginData({...loginData, password: val.target.value})}
+                                        id='email'
+                                        name='email' 
+                                        placeholder="" 
+                                        type="email" 
+                                        className={`celda ${errors.email ? "celdaIncorrecte" : ""}`}
+                                        onChange={(val) => setLoginData({...loginData, eu: val.target.value})}
                                     />
-                                    <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
-                                        👁
-                                    </span>
+                                </FormGroup>
+
+                                <FormGroup className="camp">
+                                    <Label for="password" className='textLogin'> Password *</Label>
+                                    <div className="password-wrapper">
+                                        <Input 
+                                            id='password' 
+                                            className={`celda ${errors.password ? "celdaIncorrecte" : ""}`} 
+                                            name='password' 
+                                            type="password" 
+                                            onChange={(val) => setLoginData({...loginData, password: val.target.value})}
+                                        />
+                                        <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
+                                            👁
+                                        </span>
+                                    </div>
+                                </FormGroup>
+
+                                <div className='contenidor-botoLogin'>
+                                    <Button type='button' className='botoLogin' onClick={handleSubmit}>
+                                        Log In
+                                    </Button>
+
+                                    <Link to="/register" id='main' className='textLogin'>
+                                        Don't have an account?
+                                    </Link>
+                                    <Link to="#" id='main' className='textLogin' onClick={() => setForgotPasswd(true)}>
+                                        Forgot password?
+                                    </Link>
                                 </div>
-                            </FormGroup>
+                        </Form>
+                    </>
+                ) : (
+                    <div className='forgotPasswd-container'>
+                        <h2>Forgot your password?</h2>
+                        <p>Enter your email address below and we'll send you instructions on how to reset it.</p>
+                        <label className='etiquetaInput'>
+                            <p>Email address</p>
+                            <p>(required)</p>
+                        </label>
+                        <input 
+                            id='emailForgotPasswd' 
+                            name='emailForgotPasswd' 
+                            className='celda mailForgotPasswd'
+                            onChange={(val) => setLoginData({...loginData, email: val.target.value})}>
+                        </input>
+                        <button onClick={handleForgotPassword}>Send Code</button>
+                        <Link to="#" className='cancelForgotPasswd' onClick={() => setForgotPasswd(false)}>
+                            Cancel
+                        </Link>
+                    </div>
 
-                            <div className='contenidor-botoLogin'>
-                                <Button type='button' className='botoLogin' onClick={handleSubmit}>
-                                    Log In
-                                </Button>
-
-                                <Link to="/register" id='main' className='textLogin'>
-                                    Don't have an account?
-                                </Link>
-                                <Link to="/" id='main' className='textLogin'>
-                                    Forgot password?
-                                </Link>
-                            </div>
-                    </Form>
+                 )}
                 </div>
             </div>
         </div>

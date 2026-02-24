@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './header.css';
 import Card from '../user-card/Card';
 
-function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout }) {
+function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData }) {
   // props.isHidden -> estat (boolea)
   // props.setHidden -> funcio per canviar l'estat al App
   const location = useLocation();
@@ -28,7 +28,7 @@ function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout }) {
                   <img src="./public/img/message.png" className="message-img" alt="message"/>
 
                   <div className='containerHeader-user'>
-                    <Card isHeader={true} />
+                    <Card isHeader={true} userData={userData}/>
                   </div>
               </div>
           </div>
