@@ -76,3 +76,9 @@
 .friends-container::-webkit-scrollbar {
   display: none;
 }
+
+.mainContainer{
+  width: 100%;
+  height: 100%;
+  background-color: red;
+}

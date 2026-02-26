@@ -25,10 +25,13 @@ function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData })
 
               <div className='header-user'>
                   <img src="./public/img/campana.png" className="bell-img" alt="notifications" />
-                  <img src="./public/img/message.png" className="message-img" alt="message"/>
 
                   <div className='containerHeader-user'>
                     <Card isHeader={true} userData={userData}/>
+                  </div>
+
+                  <div className='containerRefresh'>
+                    <img src="./public/img/actualizar.png" className="imgRefresh"/>
                   </div>
               </div>
           </div>

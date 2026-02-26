@@ -8,15 +8,24 @@
 }
 
 .user-avatar {
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
   width: 42px;
   height: 42px;
   border-radius: 50%;
   border: 1px solid white;
-  background-image: url("../../../public/img/avatar-prova.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
+}
+
+.state{
+  background-color: rgb(0, 255, 0);
+  border-radius: 100px;
+  height: 10px;
+  width: 10px;
 }
 
 .user-name {

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('connexio.php');
 
 
@@ -55,22 +56,24 @@ if (!$user) {
     exit;
 }
 
-if (!password_verify($password, $user["password"])) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid credentials"
-    ]);
-    exit;
-}
-
-/*if ($password !== $user["password"]) {
+/*if (!password_verify($password, $user["password"])) {
     echo json_encode([
         "success" => false,
         "message" => "Invalid credentials"
     ]);
     exit;
 }*/
+
+if ($password !== $user["password"]) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Invalid credentials"
+    ]);
+    exit;
+}
     
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['username'] = $user['username'];
 
 // Login OK
 echo json_encode([
@@ -78,5 +81,7 @@ echo json_encode([
     "userId" => $user["id"],
     "username" => $user["username"],
     "state" => "connected",
-    "description" => "Steam not connected"
+    "description" => "Steam not connected",
+    "avatar" =>$user["avatar_url"],
 ]);
+

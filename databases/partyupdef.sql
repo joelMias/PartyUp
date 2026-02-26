@@ -42,16 +42,16 @@ CREATE TABLE game_genres (
   steam_appid int(11) NOT NULL,
   genre_id int(11) NOT NULL,
   PRIMARY KEY (steam_appid, genre_id),
-  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid) ON DELETE CASCADE,
-  FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
+  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid),
+  FOREIGN KEY (genre_id) REFERENCES genres(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE game_tags (
   steam_appid int(11) NOT NULL,
   tag_id int(11) NOT NULL,
   PRIMARY KEY (steam_appid, tag_id),
-  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid) ON DELETE CASCADE,
-  FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid),
+  FOREIGN KEY (tag_id) REFERENCES tags(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE user_games (
@@ -61,8 +61,8 @@ CREATE TABLE user_games (
   playtime_2weeks int(11) DEFAULT 0,
   is_active tinyint(1) DEFAULT 1,
   PRIMARY KEY (user_id, steam_appid),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (steam_appid) REFERENCES games(steam_appid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE swipes (
@@ -77,12 +77,26 @@ CREATE TABLE swipes (
   FOREIGN KEY (user_to) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE friends (
-  user_id int(11) NOT NULL,
-  friend_id int(11) NOT NULL,
-  status enum('pending', 'accepted', 'blocked') DEFAULT 'pending',
-  created_at timestamp DEFAULT current_timestamp(),
-  PRIMARY KEY (user_id, friend_id),
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (friend_id) REFERENCES users(id)
+CREATE TABLE matches (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user1_id INT NOT NULL,
+  user2_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  UNIQUE KEY unique_match (user1_id, user2_id),
+
+  FOREIGN KEY (user1_id) REFERENCES users(id),
+  FOREIGN KEY (user2_id) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+
+  receiver_user_id INT NOT NULL,
+  sender_user_id INT DEFAULT NULL,
+  notification_type VARCHAR(50) NOT NULL,
+  is_read TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (receiver_user_id) REFERENCES users(id),
+  FOREIGN KEY (sender_user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

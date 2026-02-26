@@ -156,6 +156,7 @@ function Login(props){
             usuarioActual.username = data.username;
             usuarioActual.state = data.state;
             usuarioActual.description = data.description;
+            usuarioActual.avatar = data.avatar;
 
             props.setUserData(usuarioActual);
 

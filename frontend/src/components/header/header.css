@@ -123,3 +123,20 @@
 .message-img:hover {
   transform: scale(1.1);
 }
+
+.containerRefresh{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #7534B7;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.containerRefresh:hover{
+  cursor: pointer;
+}
+
+.imgRefresh{
+  height: 24px;
+}

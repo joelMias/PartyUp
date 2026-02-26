@@ -3,4 +3,5 @@ export default class userData {
     username;
     state;
     description;
+    avatar;
 }
