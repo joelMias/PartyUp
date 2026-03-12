@@ -13,6 +13,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [userData, setUserData] = useState(null);
+  const [openMenu, setOpenMenu] = useState(false);
 
   //Aquesta funcio, la pasarem als fills per poder manipular l'estat
   function handleSetGetStartedHidden(value) {
@@ -32,6 +33,7 @@ function App() {
         isLoggedIn={isLoggedIn}
         logout={handleLogout}
         userData={userData}
+        setOpenMenu={setOpenMenu}
       />
       
       <Routes>
@@ -51,7 +53,7 @@ function App() {
                 } 
         />
 
-        <Route  path="/dashboard" element={<Dashboard />}/>
+        <Route  path="/dashboard" element={<Dashboard openMenu={openMenu} />} />
 
       </Routes>
     </div>

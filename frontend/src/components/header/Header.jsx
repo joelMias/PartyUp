@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './header.css';
 import Card from '../user-card/Card';
 
-function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData }) {
+function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData, setOpenMenu }) {
   // props.isHidden -> estat (boolea)
   // props.setHidden -> funcio per canviar l'estat al App
   const location = useLocation();
@@ -10,7 +10,7 @@ function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData })
 
   return (
     <header className='contenidor-header'>
-      <Link to="/" className="logo" onClick={() => props.setHidden(false)}>
+      <Link to="/" className="logo" onClick={() => setHidden(false)}>
         <img src="/public/img/mando.png" alt="logo" className="logo" />
         <p className="app-link" id="titol">PARTY-UP</p>
       </Link>
@@ -27,7 +27,7 @@ function Header({ setHidden, isGetStartedHidden, isLoggedIn, logout, userData })
                   <img src="./public/img/campana.png" className="bell-img" alt="notifications" />
 
                   <div className='containerHeader-user'>
-                    <Card isHeader={true} userData={userData}/>
+                    <Card isHeader={true} userData={userData} setOpenMenu={setOpenMenu} />
                   </div>
 
                   <div className='containerRefresh'>
