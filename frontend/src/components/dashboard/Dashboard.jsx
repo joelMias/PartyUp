@@ -5,7 +5,7 @@ import Card from '../user-card/Card';
 import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
 
 
-export default function Dashboard({ openMenu }) {
+export default function Dashboard() {
    const location = useLocation();
    const [matches, setMatches] = React.useState([]);
    const [stateSwitch, setStateSwitch] = React.useState(false);
@@ -29,16 +29,6 @@ export default function Dashboard({ openMenu }) {
 
    return (
       <div className="dashboard-container">
-         
-         {openMenu && (
-            <div className="dropdownMenu">
-                  <div className="my-profile optionMenu"> <img src="./public/img/account-menu.png" alt="Profile" /> My Profile</div>
-                  <div className="my-games optionMenu"><img src="./public/img/games-menu.png" alt="Profile" /> My Games</div>
-                  <div className="steam-connect optionMenu"><img src="./public/img/noSteam-connected.png" alt="Profile" /> Steam Connect</div>
-                  <div className="logout optionMenu"><img src="./public/img/logout-menu.png" alt="Profile" /> Logout</div>
-            </div>
-         )}
-
          <div className='sidebar'>
             <div id='searchbar-friends'>
                <img src="./public/img/lupa.png" className="lupa-img" alt="search" />

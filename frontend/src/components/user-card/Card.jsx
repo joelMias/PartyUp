@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './card.css';
 
-export default function Card({ isHeader, userData, setOpenMenu}) {
+export default function Card({ isHeader, userData, toggleMenu}) {
     return (
         <div className='user-container'>
             <div 
@@ -23,7 +23,13 @@ export default function Card({ isHeader, userData, setOpenMenu}) {
             <div className='user-name'>
                 <p className='headerCard-userName text-card'>
                     {userData?.username || "Guest"} {/*Si es troba usuari logged*/}
-                    { isHeader && <img  className="dropdown-img" src="/img/drop-down.png" onClick={() => setOpenMenu(prev => !prev)}/>} {/*Si es el header del dashboard*/}          
+                    { isHeader && 
+                        <img 
+                            className="dropdown-img" 
+                            src="/img/drop-down.png" 
+                            onClick={() => toggleMenu()} 
+                        />
+                    }  {/*Si es el header del dashboard*/}
                 </p>
 
                 <p className='text-card'>{userData?.description || "No description"}</p>
