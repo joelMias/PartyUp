@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./header.css";
 import Card from "../user-card/Card";
 import { useState } from "react";
+import ContainerOption from "../containerOption/ContainerOption";
 
 function Header({
   setHidden,
@@ -14,6 +15,8 @@ function Header({
   const isDashboard = location.pathname === "/dashboard";
   const [openMenu, setOpenMenu] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [openContainer, setOpenContainer] = useState(true);
+  const [selectGameContainer, setSelectGameContainer] = useState(false);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -110,20 +113,30 @@ function Header({
 
       {openMenu && (
         <div className="dropdownMenu">
-          <div className="my-profile optionMenu" onClick={() => setSelectedOption("my-profile")}>
+          <div className="my-profile optionMenu" onClick={() => { setSelectedOption("my-profile"); setOpenContainer(true); }}>
             <img src="./public/img/account-menu.png" alt="Profile" /> My Profile
           </div>
-          <div className="my-games optionMenu" onClick={() => setSelectedOption("my-games")}>
+          <div className="my-games optionMenu" onClick={() => { setSelectedOption("my-games"); setOpenContainer(true); setSelectGameContainer(true); }}>
             <img src="./public/img/games-menu.png" alt="Profile" /> My Games
           </div>
-          <div className="steam-connect optionMenu" onClick={() => setSelectedOption("steam-connect")}>
+          <div className="steam-connect optionMenu" onClick={() => { setSelectedOption("steam-connect"); setOpenContainer(true); }}>
             <img src="./public/img/noSteam-connected.png" alt="Profile" /> Steam
             Connect
           </div>
-          <div className="logout optionMenu" onClick={() => setSelectedOption("logout")}>
+          <div className="logout optionMenu" onClick={() => { setSelectedOption("logout"); setOpenContainer(true); }}>
             <img src="./public/img/logout-menu.png" alt="Profile" /> Logout
           </div>
         </div>
+      )}
+
+      {(openContainer && selectedOption) && (
+        <div className="containerOption">
+          <ContainerOption
+            title={selectedOption} 
+            icon={selectGameContainer ? userData?.avatar : false}
+            close={() => setOpenContainer(false)}
+          />
+        </div>          
       )}
     </header>
   );

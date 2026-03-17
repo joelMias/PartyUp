@@ -4,7 +4,7 @@ import { Routes, Route} from 'react-router-dom';
 import Main from './components/main/Main';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Dashboard from './components/dashboard/Dashboard';
 
 function App() {
@@ -13,6 +13,15 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Comprovar si hi ha un usuari guardat al localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   //Aquesta funcio, la pasarem als fills per poder manipular l'estat
   function handleSetGetStartedHidden(value) {

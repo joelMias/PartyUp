@@ -1,0 +1,188 @@
+* {
+  box-sizing: border-box;
+}
+
+.containerSettings{
+  display: flex;
+  flex-direction: column;
+}
+
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  max-width: 90%;
+  height: 80%;
+
+  border: 1px solid transparent;
+  border-radius: 20px;
+
+  background:
+    linear-gradient(135deg, #421278 0%, #290b4a 100%) padding-box,
+    linear-gradient(135deg, #FF2D7D 0%, #A78BFA 100%) border-box;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.headerContainer {
+  display: flex;
+  width: 100%;
+  height: 7%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid;
+  border-image: linear-gradient(135deg, #FF2D7D 0%, #A78BFA 100%);
+  border-image-slice: 1;
+}
+
+.titleHeader {
+  font-size: 40px;
+  color: #fff;
+  margin: 0;
+}
+
+.rightHeader{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.closeIcon{
+  font-size: 30px;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.closeIcon:hover {
+  color: #ff4d4d;
+}
+
+.contentContainer{
+  display: flex;
+  width: 100%;
+  height: 93%;
+  padding: 20px;
+  padding: 20px;
+  gap: 20px;
+}
+
+.profile-content{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  width: 35%;
+  gap: 30px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, #421278 0%, #290b4a 100%) padding-box,
+    linear-gradient(135deg, #FF2D7D 0%, #A78BFA 100%) border-box;
+}
+
+.profile-options{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 60%;
+}
+
+.container-avatar{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: -50px;
+}
+
+.avatarProfile{
+  border-radius: 100px;
+  height: 150px;
+  width: 150px;
+  border: 8px solid #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.changeAvatar-btn{
+  width: 150px;
+  background-color: #FF2D7D;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+.changeAvatar-btn:hover {
+  background-color: #d61c1c;
+}
+
+.changeAvatar-btn:focus {
+  outline: none;
+}
+
+
+
+.configuration-options{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 330px;
+  width: 60%;
+  width: 100%;
+}
+
+.optionsList{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.option-btn{
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.option-btn:focus {
+  outline: none;
+}
+
+.option-btn:hover {
+  color: #FF2D7D;
+  transition: color 0.3s ease;
+}
+.deleteAccount-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  border-top: #A78BFA 1px solid;
+}
+
+.deleteAccountBtn:hover {
+  color: #d61c1c;
+  transition: color 0.3s ease;
+}

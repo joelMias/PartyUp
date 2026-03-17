@@ -7,8 +7,8 @@ import LoginData from '../../entity/LoginData';
 import MyAlert from '../alerta/Alert';
 import UserData from '../../entity/userData';
 
-function Login(props){
-    const location = useLocation();    
+function Login(props) {
+    const location = useLocation();
     const navigate = useNavigate();
 
     // Nou estat per controlar l'alert de registre
@@ -16,7 +16,7 @@ function Login(props){
     const [showRegisteredAlert, setShowRegisteredAlert] = React.useState(false);
 
     useEffect(() => {
-        if(location.state?.registered){
+        if (location.state?.registered) {
             setShowRegisteredAlert(true); // activem l'alert
 
             // Després de 3 segons, ocultem l'alert automàticament
@@ -28,18 +28,18 @@ function Login(props){
             return () => clearTimeout(timer);
         }
     }, []); // s'executa cada cop que canvia location.state
-    
+
 
     useEffect(() => {
-    props.setHidden(true);
+        props.setHidden(true);
 
-    return () => {
-        props.setHidden(false); //tornem a mostrar el link
-    };
+        return () => {
+            props.setHidden(false); //tornem a mostrar el link
+        };
 
     }, []);
 
-    const [loginData, setLoginData] = React.useState(new LoginData); 
+    const [loginData, setLoginData] = React.useState(new LoginData);
     const [errors, setErrors] = React.useState({});
     const [showPassword, setShowPassword] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
@@ -72,32 +72,32 @@ function Login(props){
             },
             body: JSON.stringify({ email })
         })
-        .then(async res => {
-            const text = await res.text();   // Primero obtenemos el texto crudo
-            let data;
-            try {
-                data = JSON.parse(text);     // Intentamos parsear JSON
-            } catch (err) {
-                throw new Error("Invalid server response: " + text);
-            }
+            .then(async res => {
+                const text = await res.text();   // Primero obtenemos el texto crudo
+                let data;
+                try {
+                    data = JSON.parse(text);     // Intentamos parsear JSON
+                } catch (err) {
+                    throw new Error("Invalid server response: " + text);
+                }
 
-            if (!res.ok || !data.success) {
-                throw new Error(data.message || "Error sending mail");
-            }
-            return data;
-        })
-        .then((data) => {
-            console.log('Código enviado (solo testing):', data.code);
-            setSuccess(true);
-        })
-        .catch(err => {
-            setErrors({ server: err.message });
-        });
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || "Error sending mail");
+                }
+                return data;
+            })
+            .then((data) => {
+                console.log('Código enviado (solo testing):', data.code);
+                setSuccess(true);
+            })
+            .catch(err => {
+                setErrors({ server: err.message });
+            });
     };
 
     const handleSubmit = () => {
         const newErrors = {};
-        
+
         if (!loginData.eu) {
             newErrors.email = "Missing field";
             setSuccess(false);
@@ -131,58 +131,70 @@ function Login(props){
             },
             body: JSON.stringify(credentials)
         })
-            
-        .then(async res => {
-        // Llegim la resposta del servidor i la convertim a JSON
-        const data = await res.json();
 
-        // Comprovem si la resposta HTTP NO és correcta (res.ok)
-        // O si el JSON indica que success = false
-        if (!res.ok || !data.success) {
-            // Si hi ha error, llancem una excepció amb el missatge que vingui del backend
-            throw new Error(data.message || "Login error");
-            setSuccess(false);
-        }
+            .then(async res => {
+                // LLegim la resposta com a text (per si el servidor retorna un error que no és JSON)
+                const text = await res.text();
+                let data;
 
-        // Si tot va bé, retornem el JSON per al següent .then
-        return data;
-        })
+                try {
+                    data = JSON.parse(text); // intentem de passar-ho a JSON
+                } catch (err) {
+                    throw new Error("Invalid server response: " + text);
+                }
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message || "Login error");
+                }
+
+                return data;
+            })
 
 
-        .then((data) => {
-            const usuarioActual = new UserData(); //Creem un usuari on guardarem lles dades del usuari loggejat
+            .then((data) => {
+                const usuarioActual = new UserData(); //Creem un usuari on guardarem lles dades del usuari loggejat
 
-            usuarioActual.id = data.userId;
-            usuarioActual.username = data.username;
-            usuarioActual.state = data.state;
-            usuarioActual.description = data.description;
-            usuarioActual.avatar = data.avatar;
+                usuarioActual.id = data.userId;
+                usuarioActual.username = data.username;
+                usuarioActual.state = data.state;
+                usuarioActual.description = data.description;
+                usuarioActual.avatar = data.avatar;
+                usuarioActual.email = data.email;
 
-            props.setUserData(usuarioActual);
+                props.setUserData(usuarioActual);
 
-            // Si hem arribat aquí, vol dir que el login ha estat correcte
-            // Naveguem a la pàgina principal
-            props.setHidden(false);
-            props.setIsLoggedIn(true);
+                localStorage.setItem("user", JSON.stringify({
+                    id: data.userId,
+                    email: data.email,
+                    username: data.username,
+                    state: data.state,
+                    description: data.description,
+                    avatar: data.avatar
+                }));
 
-            navigate("/dashboard", {
-                state: {loggedIn: true}
+                // Si hem arribat aquí, vol dir que el login ha estat correcte
+                // Naveguem a la pàgina principal
+                props.setHidden(false);
+                props.setIsLoggedIn(true);
+
+                navigate("/dashboard", {
+                    state: { loggedIn: true }
+                });
+            })
+            .catch(err => {
+                // Si hi ha hagut algun error (HTTP o JSON), el capturem aquí
+                // Mostrem el missatge d'error al usuari
+                setErrors({ server: err.message });
             });
-        })
-        .catch(err => {
-            // Si hi ha hagut algun error (HTTP o JSON), el capturem aquí
-            // Mostrem el missatge d'error al usuari
-            setErrors({ server: err.message });
-        });
 
-        
+
 
     };
 
-    return(
+    return (
         <div>
-           {/*Alerta d'error de servidor'*/}
-            {errors.server &&(
+            {/*Alerta d'error de servidor'*/}
+            {errors.server && (
                 <div className="alert-container">
                     <MyAlert type="error" title="Server Error" message={errors.server} />
                 </div>
@@ -190,18 +202,18 @@ function Login(props){
 
             {/*Alerta d'error en el formulari*/}
             {Object.keys(errors).length > 0 && !errors.server && (
-            <div className="alert-container">
-                <MyAlert type="warning" title="Check Input" message="Please fix the highlighted fields." />
-            </div>
+                <div className="alert-container">
+                    <MyAlert type="warning" title="Check Input" message="Please fix the highlighted fields." />
+                </div>
             )}
 
             {/*Alerta de usuari registrat correctament*/}
             {success && (
-            <div className="alert-container">
-                <MyAlert type="success" title="Success" message="User registered successfully!" />
-            </div>
+                <div className="alert-container">
+                    <MyAlert type="success" title="Success" message="User registered successfully!" />
+                </div>
             )}
-            
+
             <div className='mainFormulari'>
                 {/* Alert només si venim del registre */}
                 {showRegisteredAlert && (
@@ -213,34 +225,34 @@ function Login(props){
                 )}
 
                 <div id='contenidor-formulari' className='formulari'>
-                {!forgotPasswd ? (
-                    <>
-                        <div className='contenidorTitolLogIn'>
-                            <h1 className='titolLogIn'>Log In</h1>
-                        </div>
-                        <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
-                        <Form id='formulariLogin'> 
+                    {!forgotPasswd ? (
+                        <>
+                            <div className='contenidorTitolLogIn'>
+                                <h1 className='titolLogIn'>Log In</h1>
+                            </div>
+                            <p className='textLogin'>Welcome back! Please enter your credentials to continue.</p>
+                            <Form id='formulariLogin'>
                                 <FormGroup className="camp">
                                     <Label for="email" className='textLogin'> Username or Email address*</Label>
-                                    <Input 
+                                    <Input
                                         id='email'
-                                        name='email' 
-                                        placeholder="" 
-                                        type="email" 
+                                        name='email'
+                                        placeholder=""
+                                        type="email"
                                         className={`celda ${errors.email ? "celdaIncorrecte" : ""}`}
-                                        onChange={(val) => setLoginData({...loginData, eu: val.target.value})}
+                                        onChange={(val) => setLoginData({ ...loginData, eu: val.target.value })}
                                     />
                                 </FormGroup>
 
                                 <FormGroup className="camp">
                                     <Label for="password" className='textLogin'> Password *</Label>
                                     <div className="password-wrapper">
-                                        <Input 
-                                            id='password' 
-                                            className={`celda ${errors.password ? "celdaIncorrecte" : ""}`} 
-                                            name='password' 
-                                            type="password" 
-                                            onChange={(val) => setLoginData({...loginData, password: val.target.value})}
+                                        <Input
+                                            id='password'
+                                            className={`celda ${errors.password ? "celdaIncorrecte" : ""}`}
+                                            name='password'
+                                            type="password"
+                                            onChange={(val) => setLoginData({ ...loginData, password: val.target.value })}
                                         />
                                         <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}>
                                             👁
@@ -260,29 +272,29 @@ function Login(props){
                                         Forgot password?
                                     </Link>
                                 </div>
-                        </Form>
-                    </>
-                ) : (
-                    <div className='forgotPasswd-container'>
-                        <h2>Forgot your password?</h2>
-                        <p>Enter your email address below and we'll send you instructions on how to reset it.</p>
-                        <label className='etiquetaInput'>
-                            <p>Email address</p>
-                            <p>(required)</p>
-                        </label>
-                        <input 
-                            id='emailForgotPasswd' 
-                            name='emailForgotPasswd' 
-                            className='celda mailForgotPasswd'
-                            onChange={(val) => setLoginData({...loginData, email: val.target.value})}>
-                        </input>
-                        <button onClick={handleForgotPassword}>Send Code</button>
-                        <Link to="#" className='cancelForgotPasswd' onClick={() => setForgotPasswd(false)}>
-                            Cancel
-                        </Link>
-                    </div>
+                            </Form>
+                        </>
+                    ) : (
+                        <div className='forgotPasswd-container'>
+                            <h2>Forgot your password?</h2>
+                            <p>Enter your email address below and we'll send you instructions on how to reset it.</p>
+                            <label className='etiquetaInput'>
+                                <p>Email address</p>
+                                <p>(required)</p>
+                            </label>
+                            <input
+                                id='emailForgotPasswd'
+                                name='emailForgotPasswd'
+                                className='celda mailForgotPasswd'
+                                onChange={(val) => setLoginData({ ...loginData, email: val.target.value })}>
+                            </input>
+                            <button onClick={handleForgotPassword}>Send Code</button>
+                            <Link to="#" className='cancelForgotPasswd' onClick={() => setForgotPasswd(false)}>
+                                Cancel
+                            </Link>
+                        </div>
 
-                 )}
+                    )}
                 </div>
             </div>
         </div>

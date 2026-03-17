@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost/projecte/PartyUpRepo/backend'
+      '/api': {
+        target: 'http://localhost/Projectre_PartyUp/backend/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
     }
   }
 })
