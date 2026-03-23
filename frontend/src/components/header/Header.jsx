@@ -3,6 +3,7 @@ import "./header.css";
 import Card from "../user-card/Card";
 import { useState } from "react";
 import ContainerOption from "../containerOption/ContainerOption";
+import SteamLoginButton from "../steamConnect/SteamLogin";
 
 function Header({
   setHidden,
@@ -32,8 +33,6 @@ function Header({
         return <Profile />;
       case "my-games":
         return <MyGames />;
-      case "steam-connect":
-        return <SteamConnect />;
       default:
         return null;
     }
@@ -119,9 +118,8 @@ function Header({
           <div className="my-games optionMenu" onClick={() => { setSelectedOption("my-games"); setOpenContainer(true); setSelectGameContainer(true); }}>
             <img src="./public/img/games-menu.png" alt="Profile" /> My Games
           </div>
-          <div className="steam-connect optionMenu" onClick={() => { setSelectedOption("steam-connect"); setOpenContainer(true); }}>
-            <img src="./public/img/noSteam-connected.png" alt="Profile" /> Steam
-            Connect
+          <div className="steam-connect optionMenu">
+            <SteamLoginButton />
           </div>
           <div className="logout optionMenu" onClick={() => { setSelectedOption("logout"); setOpenContainer(true); }}>
             <img src="./public/img/logout-menu.png" alt="Profile" /> Logout

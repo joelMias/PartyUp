@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import Card from '../user-card/Card';
 import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
 
-
 export default function Dashboard() {
    const location = useLocation();
    const [matches, setMatches] = React.useState([]);
@@ -13,9 +12,9 @@ export default function Dashboard() {
    const refreshDashboard = async () => {
       //Aquest array, guardara 3 promeses una per cada fetch (peticio) al servidor i esperarem a que totes estiguin resoltes
       const [matchesRes, notificationsRes, gamesRes] = await Promise.all([
-         fetch("/api/getMatches.php"),
-         /*fetch("/api/getNotifications.php"),
-         fetch("/api/getUserGames.php")*/
+         fetch("/api/getMatches.php", { credentials: "include" }),
+         /*fetch("/api/getNotifications.php"),*/
+         fetch("/api/getUserGames.php", { credentials: "include" })
       ]);
 
       setMatches(await matchesRes.json()); //convertim la promesa a objecte js
@@ -102,8 +101,6 @@ export default function Dashboard() {
                         </div>
                      </div>
                   </div>
-               
-
                
                   <div className='matchCard'>
                      <div className='avatarContainer'>

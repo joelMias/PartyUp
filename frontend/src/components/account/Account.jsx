@@ -5,6 +5,8 @@ import { Form, FormGroup, Label, Input, FormText, Button } from 'reactstrap';
 
 function Account() {
     const [user, setUser] = useState(null);
+    const [editUserName, setEditUserName] = useState(false);
+    const [editMail, setEditMail] = useState(false);
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -28,6 +30,29 @@ function Account() {
             [name]: value
         }));
     };
+
+    const handleSave = async (field) => {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+
+      if (storedUser[field] === user[field]) return;
+
+      await fetch("/api/updateProfile.php", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              field,
+              value: user[field],
+              id: storedUser.id
+          })
+      });
+
+      localStorage.setItem("user", JSON.stringify(user));
+
+      if (field === "username") setEditUserName(false);
+      if (field === "email") setEditMail(false);
+    };
   return (
     <div className="accountContainer">
       <FormGroup className="formgroup">
@@ -37,10 +62,15 @@ function Account() {
                 type="text" 
                 id="username" 
                 name="username" 
-                value={user?.username || "your username"} 
+                value={user?.username || ""}
+                disabled={!editUserName} 
                 onChange={handleChangeUsername}
             />
-            <button>Edit</button>
+            {!editUserName ? (
+              <button onClick={() => setEditUserName(true)}>Edit</button>
+            ) : (
+              <button onClick={() => { handleSave("username"); setEditUserName(false); }}>Save</button>
+            )}
         </div>
       </FormGroup>
 
@@ -51,10 +81,15 @@ function Account() {
                 type="text" 
                 id="email" 
                 name="email" 
-                value={user?.email || "your email"} 
+                value={user?.email || ""} 
+                disabled={!editMail}
                 onChange={handleChangeEmail}
             />
-            <button>Edit</button>
+            {!editMail ? (
+              <button onClick={() => setEditMail(true)}>Edit</button>
+            ) : (
+              <button onClick={() => { handleSave("email"); setEditMail(false); }}>Save</button>
+            )}
         </div>
             
       </FormGroup>
@@ -66,7 +101,11 @@ function Account() {
 
       <FormGroup className="formgroup">
         <Label htmlFor="gameStyle">Game style</Label>
-        <Input type="select" id="gameStyle" name="gameStyle" />
+        <Input type="select" id="gameStyle" name="gameStyle">
+          <option>Both</option>
+          <option>Chill/Casual</option>
+          <option>Competitive</option>
+        </Input>
       </FormGroup>
     </div>
   );

@@ -16,11 +16,29 @@ function App() {
 
   useEffect(() => {
     // Comprovar si hi ha un usuari guardat al localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserData(JSON.parse(storedUser));
-      setIsLoggedIn(true);
+    const storedUserRaw = localStorage.getItem("user");
+    if (!storedUserRaw) return;
+
+    const storedUser = JSON.parse(storedUserRaw);
+    const params = new URLSearchParams(window.location.search);
+    const steamStatus = params.get("steam");
+
+    if (steamStatus === "connected") {
+      const updatedUser = {
+        ...storedUser,
+        description: "Steam connected"
+      };
+
+      setUserData(updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Netegem el query param per evitar re-aplicar canvis en refresh.
+      window.history.replaceState({}, "", window.location.pathname);
+    } else {
+      setUserData(storedUser);
     }
+
+    setIsLoggedIn(true);
   }, []);
 
   //Aquesta funcio, la pasarem als fills per poder manipular l'estat
