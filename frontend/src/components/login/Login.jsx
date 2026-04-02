@@ -160,6 +160,7 @@ function Login(props) {
                 usuarioActual.description = data.description;
                 usuarioActual.avatar = data.avatar;
                 usuarioActual.email = data.email;
+                usuarioActual.steamConnected = Boolean(data.steamConnected);
 
                 props.setUserData(usuarioActual);
 
@@ -169,7 +170,8 @@ function Login(props) {
                     username: data.username,
                     state: data.state,
                     description: data.description,
-                    avatar: data.avatar
+                    avatar: data.avatar,
+                    steamConnected: Boolean(data.steamConnected)
                 }));
 
                 // Si hem arribat aquí, vol dir que el login ha estat correcte

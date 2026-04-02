@@ -1,7 +1,7 @@
 <?php
 //Connexio a la base de dades:
 $host = "localhost";
-$port = 3306;
+$port = 3307;
 $dbname = "party-up";
 $user = "root";
 $pass = "";

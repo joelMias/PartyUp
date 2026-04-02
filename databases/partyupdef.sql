@@ -8,6 +8,7 @@ CREATE TABLE users (
   birth_date date NOT NULL,
   avatar_url varchar(255) DEFAULT NULL,
   bio text DEFAULT NULL,
+  region varchar(10) DEFAULT 'ES';
   play_style enum('competitive', 'chill', 'both') DEFAULT NULL,
   country_code char(2) DEFAULT 'ES',
   language varchar(50) DEFAULT 'en',
@@ -100,3 +101,13 @@ CREATE TABLE notifications (
   FOREIGN KEY (receiver_user_id) REFERENCES users(id),
   FOREIGN KEY (sender_user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE friends (
+  user_id INT NOT NULL,
+  friend_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  state ENUM('friends', 'blocked', 'deleted') DEFAULT 'friends';
+  PRIMARY KEY(user_id, friend_id),
+  FOREIGN KEY(user_id) REFERENCES users(id),
+  FOREIGN KEY(friend_id) REFERENCES users(id)
+);

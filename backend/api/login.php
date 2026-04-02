@@ -74,6 +74,11 @@ if (!password_verify($password, $user["password"])) {
     
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['username'] = $user['username'];
+if (!empty($user['steam_id'])) {
+    $_SESSION['user_steamid'] = $user['steam_id'];
+}
+
+$hasSteamConnected = !empty($user['steam_id']);
 
 // Login OK
 echo json_encode([
@@ -82,7 +87,8 @@ echo json_encode([
     "username" => $user["username"],
     "email" => $user["email"],
     "state" => "connected",
-    "description" => "Steam not connected",
+    "description" => $hasSteamConnected ? "Steam connected" : "Steam not connected",
+    "steamConnected" => $hasSteamConnected,
     "avatar" =>$user["avatar_url"],
 ]);
 

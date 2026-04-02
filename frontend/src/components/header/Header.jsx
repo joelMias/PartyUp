@@ -42,6 +42,13 @@ function Header({
     setOpenMenu(!openMenu);
   };
 
+  const handleRefreshDashboard = () => {
+    window.dispatchEvent(new Event("refresh-dashboard"));
+  };
+
+  const isSteamConnected =
+    userData?.steamConnected === true || userData?.description === "Steam connected";
+
   return (
     <header className="contenidor-header">
       <Link to="/" className="logo" onClick={() => setHidden(false)}>
@@ -85,7 +92,11 @@ function Header({
               </div>
 
               <div className="containerRefresh">
-                <img src="./public/img/actualizar.png" className="imgRefresh" />
+                <img
+                  src="./public/img/actualizar.png"
+                  className="imgRefresh"
+                  onClick={handleRefreshDashboard}
+                />
               </div>
             </div>
           </div>
@@ -119,7 +130,7 @@ function Header({
             <img src="./public/img/games-menu.png" alt="Profile" /> My Games
           </div>
           <div className="steam-connect optionMenu">
-            <SteamLoginButton />
+            <SteamLoginButton isConnected={isSteamConnected} />
           </div>
           <div className="logout optionMenu" onClick={() => { setSelectedOption("logout"); setOpenContainer(true); }}>
             <img src="./public/img/logout-menu.png" alt="Profile" /> Logout

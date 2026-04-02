@@ -23,19 +23,25 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     const steamStatus = params.get("steam");
 
-    if (steamStatus === "connected") {
-      const updatedUser = {
-        ...storedUser,
-        description: "Steam connected"
-      };
+    const steamConnectedByUrl =
+      steamStatus === "connected" || steamStatus === "login-success";
+    const steamConnectedStored =
+      storedUser?.steamConnected === true ||
+      storedUser?.description === "Steam connected";
+    const steamConnected = steamConnectedByUrl || steamConnectedStored;
 
-      setUserData(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+    const updatedUser = {
+      ...storedUser,
+      steamConnected,
+      description: steamConnected ? "Steam connected" : "Steam not connected",
+    };
 
+    setUserData(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    if (steamStatus) {
       // Netegem el query param per evitar re-aplicar canvis en refresh.
       window.history.replaceState({}, "", window.location.pathname);
-    } else {
-      setUserData(storedUser);
     }
 
     setIsLoggedIn(true);
