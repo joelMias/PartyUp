@@ -54,10 +54,33 @@ if ($stmt->fetch()) {
     exit;
 }
 
+//Creació de token amb data de expiració
+$token = bin2hex(random_bytes(32));
+
+$now = new DateTime();
+$now->add(new DateInterval('PT1H'));
+$expiresAt = $now->format('Y-m-d H:i:s');
+
+$url = "http://localhost:5173/verifyMail/";
+$finalUrl= $url . $token;
+
+$body = "
+    <div style='font-family: Arial, sans-serif; line-height: 1.6;'>
+        <h1>Verify Your Account in one click</h1>
+        <p>Thanks for joining Party-Up! Click the button below to verify your email. This link will expire in 1 hour.</p>
+        <a href='{$finalUrl}' style='background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>
+            Verify My Account
+        </a>
+        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+        <p><small>{$finalUrl}</small></p>
+    </div>
+";
+
+
 //Insertar a la base de dades
 $stmt = $pdo->prepare("
-    INSERT INTO users (email, username, password, gender, birth_date)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO users (email, username, password, gender, birth_date, email_verify_token, email_verify_expires_at, email_verified)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ");
 
 $success = $stmt->execute([
@@ -65,13 +88,31 @@ $success = $stmt->execute([
     $username,
     $hashedPassword,
     $gender,
-    $date
+    $date,
+    $token,
+    $expiresAt,
+    false
 ]);
 
 if ($success) {
-    echo json_encode([
-        "success" => true
-    ]);
+    //Importem el arxiu per enviar el correu
+    require_once(__DIR__ . '/auth/mailSender.php');
+
+    $thing = "Verify your account - PartyUp";
+    $sended = sendMail($email, $thing, $body);
+
+    if($sended){
+        echo json_encode([
+            "success" => true,
+            "message" => "Please, verify account via mail"
+        ]);
+    }
+    else{
+        echo json_encode([
+            "success" => true, 
+            "message" => "User created, but we couldn't send the email. Please try later."
+        ]);
+    }
 } else {
     echo json_encode([
         "success" => false,

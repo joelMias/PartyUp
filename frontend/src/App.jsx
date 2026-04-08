@@ -6,6 +6,8 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import { useState, useEffect } from 'react';
 import Dashboard from './components/dashboard/Dashboard';
+import VerifyRegisterMail from './components/VerifyRegister/verifyRegisterMail';
+import VerifyWait from './components/VerifyWait/VerifyWait';
 
 function App() {
   //Quan estigui en false, mostrar Get Started i quan estigui en true amagarlo
@@ -83,6 +85,12 @@ function App() {
                     setUserData={setUserData}/>
                 } 
         />
+        
+        {/*Farem servir aquest component per esperar mentres l'usuari no faci click al botó de verificació */}
+        <Route path="/verify" element={<VerifyWait />} />
+
+        {/*El que fan els dos punts es que quan anem a la ruta, quan es trobi algo despres de la / que es guardi en una variable*/}
+        <Route path="/verify/:token" element={<VerifyRegisterMail />} />
 
         <Route  path="/dashboard" element={<Dashboard />} />
 

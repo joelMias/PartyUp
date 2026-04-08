@@ -80,9 +80,7 @@ function Register(props) {
                 if (data.success) {
                     setSuccess(true);
                     setErrors({});
-                    navigate("/login", {
-                        state: { registered: true}
-                    });
+                    navigate("/verify");
                 } else {
                     setSuccess(false);
                     setErrors({ server: data.message });// Si hi ha algun error (email duplicat, error BD, etc.) guardem el missatge d'error per mostrar-lo al formulari
